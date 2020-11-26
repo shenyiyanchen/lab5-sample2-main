@@ -161,6 +161,12 @@ string TreeNode::sType2String(StmtType type) {
     case STMT_DECL:
         return "decl";
         break;
+    case STMT_ASSIGN:
+        return "assign";
+        break;
+    case STMT_IF:
+        return "if";
+        break;
     default:
         break;
     }

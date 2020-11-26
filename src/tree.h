@@ -10,23 +10,37 @@ enum NodeType
     NODE_VAR,
     NODE_EXPR,
     NODE_TYPE, //节点的类型是类型
+
     NODE_STMT,
     NODE_PROG,
 };
 
 enum OperatorType
 {
-    OP_EQ,      // ==
-    OP_PLUS,    // +
-    OP_MINUS,   //-
-    OP_MULTI,   // \*
+    OP_EQ,  // ==
+    OP_LT,  // <
+    OP_LE,  // <=
+    OP_GT,  //>
+    OP_GE,  //>=
+    OP_NEQ,  //!=
+
+    OP_ADD, //\+
+    OP_MINUS, //\-
+    OP_MUL, //\*
+    OP_DIV,   //\/
+    OP_MOD,   //\%
+
+    OP_NOT, //!
+    OP_AND, //&&
+    OP_OR,   //\|\|
 };
 
 enum StmtType {
-    STMT_SKIP,// 空语句
+    STMT_SKIP,
     STMT_DECL,
     STMT_IF,
-    STMT_LOOP,
+    STMT_WHILE,
+    STMT_ASSIGN,
 }
 ;
 

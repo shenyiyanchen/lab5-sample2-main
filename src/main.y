@@ -9,13 +9,30 @@
 
 %token T_CHAR T_INT T_STRING T_BOOL 
 
-%token LOP_ASSIGN 
+%token IF ELSE WHILE FOR RETURN
+
+%token LOP_ASSIGN
+%token OR AND
+%token EQ NEQ
+%token NE LE LT GE GT
+
+%token ADD SUB
+%token MUL DIV MOD
+%token NOT
+
+%token LBRACE RBRACE LBRACK RBRACK LPAREN RPAREN
 
 %token SEMICOLON
 
 %token IDENTIFIER INTEGER CHAR BOOL STRING
 
-%left LOP_EQ
+%left LOP_ASSIGN
+%left EQ NEQ
+%left NE LE LT GE GT
+%left ADD MINUS
+%left MUL DIV
+%left NOT
+%left LBRACE RBRACE LBRACK RBRACK LPAREN RPAREN
 
 %%
 
@@ -30,6 +47,8 @@ statements
 statement
 : SEMICOLON  {$$ = new TreeNode(lineno, NODE_STMT); $$->stype = STMT_SKIP;}//分号-STMT_SKIP
 | declaration SEMICOLON {$$ = $1;}
+| assign SEMICOLON {$$ = $1;}
+| if {$$ = $1;}
 ;
 
 declaration
@@ -50,6 +69,34 @@ declaration
 }
 ;
 
+assign 
+:   IDENTIFIER LOP_ASSIGN expr {
+        TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
+        node->stype = STMT_ASSIGN;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+;
+
+if
+:   IF LPAREN expr RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE{
+        TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
+        node->stype = STMT_IF;
+        node->addChild($3);
+        node->addChild($6);
+        node->addChild($10);
+        $$ = node;
+}
+|   IF LPAREN expr RPAREN LBRACE statements RBRACE{
+        TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
+        node->stype = STMT_IF;
+        node->addChild($3);
+        node->addChild($6);
+        $$ = node;
+}
+;
+
 expr
 : IDENTIFIER {
     $$ = $1;
@@ -62,6 +109,103 @@ expr
 }
 | STRING {
     $$ = $1;
+}
+|   expr OR expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_OR;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr AND expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_AND;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr EQ expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_EQ;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr NEQ expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_NEQ;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr LE expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_LE;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr LT expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_LT;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr GE expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_GE;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr GT expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_GT;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr ADD expr{
+        TreeNode* node = new TreeNode($1->lineno, NODE_EXPR);
+        node->optype = OP_ADD;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr MINUS expr{
+        TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_MINUS;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr MUL expr{
+        TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_MUL;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr DIV expr{
+        TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_DIV;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   expr MOD expr{
+        TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_MOD;
+        node->addChild($1);
+        node->addChild($3);
+        $$ = node;
+}
+|   NOT expr{
+    TreeNode*node = new TreeNode($1->lineno,NODE_EXPR);
+        node->optype = OP_NOT;
+        node->addChild($2);
+        $$ = node;
 }
 ;
 

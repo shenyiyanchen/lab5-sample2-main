@@ -14,6 +14,7 @@ CHAR \'.?\'
 STRING \".+\"
 BOOL [0|1]
 IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
+
 %%
 
 {BLOCKCOMMENT}  /* do nothing */
@@ -25,9 +26,33 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 "char" return T_CHAR;
 "string" return T_STRING;
 
-"=" return LOP_ASSIGN;
+"if"        return IF;
+"else"      return ELSE;
+"while"     return WHILE;
+"for"       return FOR;
+"return"    return RETURN;
 
-";" return  SEMICOLON;
+"=="        return EQ;
+"!="        return NEQ;
+"<="        return LE;
+"<"         return LT;
+">="        return GE;
+">"         return GT;
+
+"="         return LOP_ASSIGN;
+"+"         return ADD;
+"-"         return MINUS;
+"*"         return MUL;
+"/"         return DIV;
+"%"         return MOD;
+
+";"         return SEMICOLON;
+"{"         return LBRACE;
+"}"         return RBRACE;
+"["         return LBRACK;
+"]"         return RBRACK;
+"("         return LPAREN;
+")"         return RPAREN;
 
 {INTEGER} {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
