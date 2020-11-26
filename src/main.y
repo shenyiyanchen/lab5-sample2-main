@@ -1,11 +1,12 @@
 %{
     #include "common.h"
-    #define YYSTYPE TreeNode *  
+    #define YYSTYPE TreeNode *  //此处定义了$$的类型
     TreeNode* root;
     extern int lineno;
     int yylex();
     int yyerror( char const * );
 %}
+
 %token T_CHAR T_INT T_STRING T_BOOL 
 
 %token LOP_ASSIGN 
@@ -23,11 +24,11 @@ program
 
 statements
 :  statement {$$=$1;}
-|  statements statement {$$=$1; $$->addSibling($2);}
+|  statements statement {$$=$1;$$->addSibling($2);}
 ;
 
 statement
-: SEMICOLON  {$$ = new TreeNode(lineno, NODE_STMT); $$->stype = STMT_SKIP;}
+: SEMICOLON  {$$ = new TreeNode(lineno, NODE_STMT); $$->stype = STMT_SKIP;}//分号-STMT_SKIP
 | declaration SEMICOLON {$$ = $1;}
 ;
 
@@ -40,7 +41,7 @@ declaration
     node->addChild($4);
     $$ = node;   
 } 
-| T IDENTIFIER {
+| T IDENTIFIER {                // declare
     TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
     node->stype = STMT_DECL;
     node->addChild($1);
@@ -67,6 +68,7 @@ expr
 T: T_INT {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_INT;} 
 | T_CHAR {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_CHAR;}
 | T_BOOL {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_BOOL;}
+| T_STRING {$$ = new TreeNode(lineno, NODE_TYPE); $$->type = TYPE_STRING;}
 ;
 
 %%

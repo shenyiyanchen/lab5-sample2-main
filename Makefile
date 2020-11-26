@@ -1,5 +1,5 @@
 CC := g++
-CFLAGS := -Wall -Wextra -std=c++11 # without debug
+CFLAGS := -w -Wextra -std=c++11 # without debug
 TARGET := ./bin/main
 
 all: run
@@ -26,6 +26,6 @@ run: lex yacc main
 
 clean:
 	rm -f src/*.output src/main.lex.yy.cpp src/main.tab.cpp src/main.tab.h src/main.output src/pch.h.gch $(TARGET) *.o ./bin/* 
-
+	rm myresult.txt
 test: 
-	./bin/main tests/test.c > result.txt
+	./bin/main tests/test.c > myresult.txt
