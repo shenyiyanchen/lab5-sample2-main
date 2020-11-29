@@ -9,7 +9,7 @@ enum NodeType
     NODE_CONST, 
     NODE_VAR,
     NODE_EXPR,
-    NODE_TYPE, //节点的类型是类型
+    NODE_TYPE, 
 
     NODE_STMT,
     NODE_PROG,

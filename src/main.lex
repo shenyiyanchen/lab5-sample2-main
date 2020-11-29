@@ -54,6 +54,10 @@ IDENTIFIER [[:alpha:]_][[:alpha:][:digit:]_]*
 "("         return LPAREN;
 ")"         return RPAREN;
 
+"!"         return NOT;
+"||"        return OR;
+"&&"        return AND;
+
 {INTEGER} {
     TreeNode* node = new TreeNode(lineno, NODE_CONST);
     node->type = TYPE_INT;

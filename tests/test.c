@@ -5,5 +5,5 @@ if(!2==3){
     a=a+2;
 }
 while(a==b){
-    printf(a);
+    a=3;
 }

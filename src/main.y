@@ -49,6 +49,7 @@ statement
 | declaration SEMICOLON {$$ = $1;}
 | assign SEMICOLON {$$ = $1;}
 | if {$$ = $1;}
+| while {$$ = $1;}
 ;
 
 declaration
@@ -91,6 +92,16 @@ if
 |   IF LPAREN expr RPAREN LBRACE statements RBRACE{
         TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
         node->stype = STMT_IF;
+        node->addChild($3);
+        node->addChild($6);
+        $$ = node;
+}
+;
+
+while
+:   WHILE LPAREN expr RPAREN LBRACE statements RBRACE{
+        TreeNode* node = new TreeNode($1->lineno, NODE_STMT);
+        node->stype = STMT_WHILE;
         node->addChild($3);
         node->addChild($6);
         $$ = node;
